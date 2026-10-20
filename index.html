@@ -9,6 +9,15 @@
 <style>
 :root{--bosco:#14321F;--prato:#1E7A3A;--oro:#F4C430;--crema:#EEF3E8;--amb:#F2A65A;--pesca:#F7C9A0;--tx:#EEF3E8;--g:rgba(255,255,255,.12);--gb:rgba(255,255,255,.26)}
 *{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+*{scrollbar-width:thin;scrollbar-color:rgba(244,196,48,.55) transparent}
+@supports selector(::-webkit-scrollbar){*{scrollbar-width:auto;scrollbar-color:auto}
+::-webkit-scrollbar{width:12px;height:12px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:linear-gradient(180deg,rgba(244,196,48,.65),rgba(242,166,90,.5));border-radius:99px;border:3px solid transparent;background-clip:padding-box}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#F4C430,#F2A65A);background-clip:padding-box;border:3px solid transparent}
+::-webkit-scrollbar-button,::-webkit-scrollbar-corner{display:none}
+aside::-webkit-scrollbar-track{margin:18px 0}}
 html{background:var(--bosco)}
 body{font-family:'Manrope',sans-serif;color:var(--tx);min-height:100vh;font-size:14px;background:
 radial-gradient(900px 600px at 8% 0%,rgba(244,196,48,.55),transparent 60%),
@@ -39,7 +48,7 @@ header{position:fixed;top:12px;left:12px;right:12px;height:60px;z-index:20;displ
 header img{height:40px}.brand{font-weight:800;letter-spacing:2px;font-size:15px;line-height:1}
 .brand i{display:block;font-family:'Alex Brush',cursive;font-style:normal;font-weight:400;font-size:26px;color:var(--oro);letter-spacing:0;margin-top:-2px}
 header .sp{flex:1}header select{width:auto;margin:0;padding:7px 10px}#menu{display:none}
-aside{position:fixed;top:84px;left:12px;bottom:12px;width:268px;z-index:15;padding:14px;overflow:auto}
+aside{position:fixed;top:84px;left:12px;bottom:12px;width:268px;z-index:15;padding:14px 6px 14px 14px;overflow-y:auto;overflow-x:hidden}
 aside .sh{font-size:11px;letter-spacing:1.5px;font-weight:800;text-transform:uppercase;opacity:.65;margin:14px 8px 6px}
 aside .ni{display:block;width:100%;text-align:left;background:none;color:var(--tx);padding:9px 12px;border-radius:12px;font-weight:600}
 aside .ni:hover{background:var(--g)}aside .ni.on{background:linear-gradient(135deg,rgba(244,196,48,.35),rgba(242,166,90,.25));box-shadow:inset 0 0 0 1px rgba(244,196,48,.5)}
@@ -75,11 +84,8 @@ main{margin:84px 10px 100px}header{left:8px;right:8px;top:8px;gap:8px;padding:0 
 #bar{display:flex;position:fixed;left:8px;right:8px;bottom:8px;z-index:25;padding:6px;justify-content:space-around}
 #bar button{background:none;color:var(--tx);font-size:20px;padding:8px 12px;border-radius:14px}#bar button.on{background:rgba(244,196,48,.3)}}
 </style></head><body>
-<div id="login"><div class="glass"><img src="logo.png" alt=""><h1>MARZENEGO</h1><span class="script">Riverside</span>
-<label>Nome utente<input id="lu" autocomplete="username"></label><label>Password<input id="lp" type="password" autocomplete="current-password"></label>
-<button class="b" id="lb" style="width:100%">Accedi</button><p id="le" class="err" style="margin-top:12px"></p></div></div>
-<div id="app" hidden>
-<header class="glass"><button class="ic" id="menu">☰</button><img src="logo.png" alt=""><div class="brand">MARZENEGO<i>Riverside</i></div><div class="sp"></div><select id="season" title="Stagione contabile"></select><span id="who"></span><button class="b2" id="out">Esci</button></header>
+<div id="app">
+<header class="glass"><button class="ic" id="menu">☰</button><img src="logo.png" alt=""><div class="brand">MARZENEGO<i>Riverside</i></div><div class="sp"></div><select id="season" title="Stagione contabile" hidden></select><button class="b2" id="usr">👤 Accedi</button></header>
 <aside class="glass" id="nav"></aside><main id="main"></main><nav id="bar" class="glass"></nav></div>
 <div id="toast"></div>
 <script type="module">
@@ -228,12 +234,12 @@ function newPage(sec){modal('Nuova pagina · '+SEC[sec].t,`<label>Nome<input id=
 
 /* ---------- Navigazione ---------- */
 const V={bilancio:vBilancio,quote:vQuote,utenze:vUtenze};
-function nav(){const [a,b]=S.route.split(':'),cur=S.route;let h=`<button class="ni ${a==='dash'?'on':''}" data-r="dash">🏠 Dashboard</button>`;
+function nav(){if(!S.user){$('#nav').innerHTML='<div class="sh">Accesso</div><small style="padding:0 8px">Clicca su “Accedi” in alto a destra.</small>';$('#bar').innerHTML='';return}const [a,b]=S.route.split(':'),cur=S.route;let h=`<button class="ni ${a==='dash'?'on':''}" data-r="dash">🏠 Dashboard</button>`;
 for(const k in SEC){if(perm(k)==='none')continue;const its=SEC[k].it.filter(i=>!adminOnly.includes(i[0])||S.user.admin);h+=`<div class="sh">${SEC[k].i} ${SEC[k].t}</div>`+its.map(i=>`<button class="ni ${cur===k+':'+i[0]?'on':''}" data-r="${k}:${i[0]}">${i[1]}</button>`).join('')+S.pages.filter(p=>p.sec===k).map(p=>`<button class="ni ${cur==='p:'+p.id?'on':''}" data-r="p:${p.id}">${{tabella:'▤',documento:'📝',raccolta:'🗂'}[p.tipo]} ${E(p.nome)}</button>`).join('')+(canW(k)?`<button class="ni add" data-n="${k}">+ Nuova pagina</button>`:'')}
 $('#nav').innerHTML=h;$('#nav').querySelectorAll('[data-r]').forEach(x=>x.onclick=()=>go(x.dataset.r));$('#nav').querySelectorAll('[data-n]').forEach(x=>x.onclick=()=>newPage(x.dataset.n));
 $('#bar').innerHTML=`<button class="${a==='dash'?'on':''}" data-r="dash">🏠</button>`+Object.keys(SEC).filter(k=>perm(k)!=='none').map(k=>`<button class="${a===k||(a==='p'&&S.pages.find(p=>p.id===b)?.sec===k)?'on':''}" data-r="${k}:${SEC[k].it[0][0]}">${SEC[k].i}</button>`).join('');$('#bar').querySelectorAll('[data-r]').forEach(x=>x.onclick=()=>go(x.dataset.r))}
 function go(r){S.route=r;$('#nav').classList.remove('open');render()}
-async function render(){const [a,b]=S.route.split(':'),el=$('#main');nav();el.innerHTML='<div class="glass card">Caricamento…</div>';
+async function render(){const [a,b]=S.route.split(':'),el=$('#main');nav();if(!S.user){el.innerHTML='<div class="glass card" style="text-align:center;padding:40px"><img src="logo.png" style="width:110px;filter:drop-shadow(0 8px 20px rgba(0,0,0,.4))" alt=""><h2 style="margin-top:10px">MARZENEGO <span class="script" style="font-size:40px">Riverside</span></h2><p style="opacity:.8;margin-top:6px">Clicca sul tuo utente in alto a destra per accedere.</p></div>';return}el.innerHTML='<div class="glass card">Caricamento…</div>';
 try{if(a==='dash')return await vDash(el);if(a==='p')return await vPage(el,b);
 if(perm(a)==='none'||(adminOnly.includes(b)&&!S.user.admin)){el.innerHTML='<div class="glass card">Non hai i permessi per questa sezione.</div>';return}
 const title=SEC[a].it.find(i=>i[0]===b)[1];el.innerHTML=`<div class="ph"><h2>${title}</h2></div><div id="vc"></div>`;const c=el.querySelector('#vc');
@@ -244,14 +250,16 @@ catch(e){el.innerHTML=`<div class="glass card err">Errore: ${E(e.message)}<br><s
 async function start(user){S.user=user;localStorage.setItem('mz_uid',user.id);
 const st=await rows(O,'stagioniContabili').catch(()=>[]);S.seasons=st.sort((a,b)=>(b.inizio||'')>(a.inizio||'')?1:-1);
 const sel=$('#season');sel.innerHTML=S.seasons.map(s=>`<option>${E(s.nome)}</option>`).join('');
-const pick=()=>{S.season=S.seasons.find(s=>s.nome===sel.value)||S.season};pick();sel.onchange=()=>{pick();render()};
-await loadPages();$('#who').textContent=user.nome||user.username;$('#login').hidden=true;$('#app').hidden=false;render()}
+const pick=()=>{S.season=S.seasons.find(s=>s.nome===sel.value)||S.season};pick();sel.onchange=()=>{pick();render()};sel.hidden=false;
+await loadPages();$('#usr').textContent='👤 '+(user.nome||user.username);S.route='dash';render()}
 async function login(){const u=$('#lu').value.trim().toLowerCase(),p=$('#lp').value,e=$('#le');e.textContent='';
 try{let list=await getDocs(collection(N,'utenti_gestionale'));
 if(list.empty){await addDoc(collection(N,'utenti_gestionale'),{username:'pippo',nome:'Pippo',admin:true,perm:{},hash:await sha('pippo')});list=await getDocs(collection(N,'utenti_gestionale'))}
-const d=list.docs.find(x=>x.data().username===u);if(!d||d.data().hash!==await sha(p)){e.textContent='Credenziali non valide';return}
-await start({id:d.id,...d.data()});log('Accesso')}catch(x){e.textContent='Errore di connessione: '+x.message}}
-$('#lb').onclick=login;$('#lp').onkeydown=e=>{if(e.key==='Enter')login()};
-$('#out').onclick=()=>{localStorage.removeItem('mz_uid');location.reload()};$('#menu').onclick=()=>$('#nav').classList.toggle('open');
-(async()=>{const id=localStorage.getItem('mz_uid');if(id)try{const d=await getDoc(doc(N,'utenti_gestionale',id));if(d.exists())await start({id,...d.data()})}catch(e){}})();
+const d=list.docs.find(x=>x.data().username===u);if(!d||d.data().hash!==await sha(p)){e.textContent='Credenziali non valide';return false}
+await start({id:d.id,...d.data()});log('Accesso')}catch(x){e.textContent='Errore di connessione: '+x.message;return false}}
+function openUser(){if(S.user){modal('👤 '+E(S.user.nome||S.user.username),`<p>${S.user.admin?'Amministratore':'Utente'} · @${E(S.user.username)}</p>`,()=>{localStorage.removeItem('mz_uid');location.reload();return false},'Esci');return}
+const m=modal('<span class="script" style="font-size:34px">Accedi</span>','<label>Nome utente<input id="lu" autocomplete="username"></label><label>Password<input id="lp" type="password" autocomplete="current-password"></label><p id="le" class="err"></p>',login,'Accedi');
+m.querySelector('#lp').onkeydown=e=>{if(e.key==='Enter')m.querySelector('[data-ok]').click()};m.querySelector('#lu').focus()}
+$('#usr').onclick=openUser;$('#menu').onclick=()=>$('#nav').classList.toggle('open');
+(async()=>{const id=localStorage.getItem('mz_uid');if(id)try{const d=await getDoc(doc(N,'utenti_gestionale',id));if(d.exists())return await start({id,...d.data()})}catch(e){}render()})();
 </script></body></html>
