@@ -220,7 +220,7 @@ el.innerHTML=`<div class="ph"><h2><span class="script" style="font-size:40px">Be
 
 /* ---------- Pagine personalizzate ---------- */
 const TY={testo:'text',numero:'num','€':'eur',euro:'eur',data:'date','sì/no':'bool',lungo:'area'};
-function parseCols(s){return s.split(',').map((p,i)=>{const [l,t='testo']=p.split(':').map(x=>x.trim());if(!l)return null;const m=t.match(/^scelta=(.+)$/);return {k:'c'+i,l,t:m?'sel':TY[t.toLowerCase()]||'text',o:m?m[1].split('/').map(x=>x.trim()):undefined}}).filter(Boolean)}
+function parseCols(s){return s.split(',').map((p,i)=>{const [l,t='testo']=p.split(':').map(x=>x.trim());if(!l)return null;const m=t.match(/^scelta=(.+)$/);const c={k:'c'+i,l,t:m?'sel':TY[t.toLowerCase()]||'text'};if(m)c.o=m[1].split('/').map(x=>x.trim()).filter(Boolean);return c}).filter(Boolean)}
 async function vPage(el,id){const p=S.pages.find(x=>x.id===id);if(!p){el.innerHTML='<div class="card glass">Pagina non trovata</div>';return}
 const ed=canW(p.sec);el.innerHTML=`<div class="ph"><h2>${E(p.nome)}</h2>${ed?'<button class="b2" id="dp">🗑 Elimina pagina</button>':''}</div><div id="pc"></div>`;
 el.querySelector('#dp')?.addEventListener('click',async()=>{if(confirm('Eliminare la pagina (le righe restano nel DB)?')){await deleteDoc(doc(N,'pagine',id));log('Pagina eliminata: '+p.nome);await loadPages();go('dash')}});
