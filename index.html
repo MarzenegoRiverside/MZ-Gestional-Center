@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="it"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Marzenego Riverside · Gestionale</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#14321F"><link rel="icon" href="logo.png"><link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bosco:#14321F;--prato:#1E7A3A;--oro:#F4C430;--crema:#EEF3E8;--amb:#F2A65A;--pesca:#F7C9A0;--tx:#EEF3E8;--g:rgba(255,255,255,.12);--gb:rgba(255,255,255,.26)}
+*{box-sizing:border-box;margin:0}
+html{background:var(--bosco)}
+body{font-family:'Manrope',sans-serif;color:var(--tx);min-height:100vh;font-size:14px;background:
+radial-gradient(900px 600px at 8% 0%,rgba(244,196,48,.55),transparent 60%),
+radial-gradient(800px 700px at 100% 20%,rgba(242,166,90,.42),transparent 62%),
+radial-gradient(900px 800px at 40% 110%,rgba(30,122,58,.75),transparent 60%),
+linear-gradient(160deg,#3a4a22,#14321F 55%,#0f2517) fixed}
+.glass{background:var(--g);backdrop-filter:blur(26px) saturate(170%);-webkit-backdrop-filter:blur(26px) saturate(170%);border:1px solid var(--gb);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 12px 40px rgba(0,0,0,.28);border-radius:22px}
+h1,h2,h3{font-weight:800}
+.script{font-family:'Alex Brush',cursive;font-weight:400;color:var(--oro)}
+input,select,textarea{width:100%;background:rgba(255,255,255,.1);border:1px solid var(--gb);border-radius:12px;padding:10px 12px;color:var(--tx);font:inherit;outline:none;margin-top:4px}
+input:focus,select:focus,textarea:focus{border-color:var(--oro);box-shadow:0 0 0 3px rgba(244,196,48,.25)}
+input[type=checkbox]{width:auto}
+select option{color:#14321F}
+label{display:block;font-size:12px;font-weight:600;opacity:.9;margin-bottom:10px}
+small{opacity:.7;font-weight:400}
+button{font:inherit;cursor:pointer;border:0}
+.b{background:linear-gradient(135deg,var(--oro),var(--amb));color:#14321F;font-weight:800;padding:10px 18px;border-radius:14px;box-shadow:0 6px 18px rgba(244,196,48,.3)}
+.b2{background:var(--g);border:1px solid var(--gb);color:var(--tx);padding:9px 14px;border-radius:14px;font-weight:600}
+.b:hover,.b2:hover{filter:brightness(1.1)}
+.ic{background:none;color:var(--tx);font-size:15px;padding:4px 7px;border-radius:8px}.ic:hover{background:var(--g)}
+a{color:var(--oro)}
+#login{min-height:100vh;display:grid;place-items:center;padding:20px}
+#login .glass{padding:34px;width:min(380px,100%);text-align:center}
+#login img{width:110px;margin-bottom:10px;filter:drop-shadow(0 8px 20px rgba(0,0,0,.4))}
+#login h1{font-size:22px;letter-spacing:2px}#login .script{font-size:42px;display:block;margin:-6px 0 14px}
+.err{color:#ffb3a7}
+header{position:fixed;top:12px;left:12px;right:12px;height:60px;z-index:20;display:flex;align-items:center;gap:12px;padding:0 16px}
+header img{height:40px}.brand{font-weight:800;letter-spacing:2px;font-size:15px;line-height:1}
+.brand i{display:block;font-family:'Alex Brush',cursive;font-style:normal;font-weight:400;font-size:26px;color:var(--oro);letter-spacing:0;margin-top:-2px}
+header .sp{flex:1}header select{width:auto;margin:0;padding:7px 10px}#menu{display:none}
+aside{position:fixed;top:84px;left:12px;bottom:12px;width:268px;z-index:15;padding:14px;overflow:auto}
+aside .sh{font-size:11px;letter-spacing:1.5px;font-weight:800;text-transform:uppercase;opacity:.65;margin:14px 8px 6px}
+aside .ni{display:block;width:100%;text-align:left;background:none;color:var(--tx);padding:9px 12px;border-radius:12px;font-weight:600}
+aside .ni:hover{background:var(--g)}aside .ni.on{background:linear-gradient(135deg,rgba(244,196,48,.35),rgba(242,166,90,.25));box-shadow:inset 0 0 0 1px rgba(244,196,48,.5)}
+aside .add{color:var(--oro);font-size:12px;opacity:.9}
+main{margin:84px 12px 20px 292px;padding-bottom:10px}
+.ph{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 4px 16px}.ph h2{font-size:24px;flex:1}
+.card{padding:18px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-bottom:14px}
+.kpi{padding:18px}.kpi small{display:block;font-weight:700;text-transform:uppercase;letter-spacing:1px;font-size:11px}.kpi b{font-size:26px;display:block;margin-top:4px}
+.pos{color:#8ff0b0}.neg{color:#ffa699}
+.tw{overflow:auto;border-radius:16px}
+table{width:100%;border-collapse:collapse;min-width:560px}
+th,td{text-align:left;padding:11px 12px;border-bottom:1px solid rgba(255,255,255,.12);vertical-align:top}
+th{font-size:11px;letter-spacing:1px;text-transform:uppercase;opacity:.75;cursor:pointer;white-space:nowrap;user-select:none}
+tfoot td{font-weight:800;border-top:2px solid var(--gb);border-bottom:0}
+tr:hover td{background:rgba(255,255,255,.05)}
+.bd{font-size:10px;font-weight:800;padding:2px 8px;border-radius:99px;margin-left:4px;color:#14321F}
+.bd.r{background:#ff8a7a}.bd.y{background:var(--oro)}.bd.g{background:#7fe3a0}
+.tb{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}.tb input{flex:1;min-width:150px;margin:0}
+.mod{position:fixed;inset:0;background:rgba(10,25,15,.55);backdrop-filter:blur(6px);z-index:50;display:grid;place-items:center;padding:16px}
+.box{padding:24px;width:min(520px,100%);max-height:90vh;overflow:auto;background:rgba(30,60,40,.7)}
+.box h3{margin-bottom:14px}.act{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
+.kan{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(230px,1fr);gap:12px;overflow:auto;padding-bottom:8px}
+.kcol h4{margin:0 0 8px 4px;font-size:12px;text-transform:uppercase;letter-spacing:1px}.kcol h4 span{opacity:.6}
+.kcard{padding:12px;margin-bottom:10px;border-radius:16px;display:grid;gap:6px}.kcard select{padding:5px 8px;font-size:12px}
+.bar{height:10px;border-radius:9px;background:rgba(255,255,255,.12);overflow:hidden;margin:4px 0}.bar i{display:block;height:100%;border-radius:9px}
+.ed{min-height:300px;padding:16px;background:rgba(255,255,255,.08);border-radius:16px;outline:none;line-height:1.6}
+.lst div{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+#bar{display:none}#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--oro);color:#14321F;padding:10px 18px;border-radius:14px;font-weight:700;z-index:99;display:none}
+@media(max-width:820px){
+#menu{display:block}aside{transform:translateX(-110%);transition:.25s;top:84px;bottom:90px;z-index:30;width:min(300px,86vw)}aside.open{transform:none}
+main{margin:84px 10px 100px}header{left:8px;right:8px;top:8px;gap:8px;padding:0 10px}.brand{font-size:12px}#who{display:none}
+#bar{display:flex;position:fixed;left:8px;right:8px;bottom:8px;z-index:25;padding:6px;justify-content:space-around}
+#bar button{background:none;color:var(--tx);font-size:20px;padding:8px 12px;border-radius:14px}#bar button.on{background:rgba(244,196,48,.3)}}
+</style></head><body>
+<div id="login"><div class="glass"><img src="logo.png" alt=""><h1>MARZENEGO</h1><span class="script">Riverside</span>
+<label>Nome utente<input id="lu" autocomplete="username"></label><label>Password<input id="lp" type="password" autocomplete="current-password"></label>
+<button class="b" id="lb" style="width:100%">Accedi</button><p id="le" class="err" style="margin-top:12px"></p></div></div>
+<div id="app" hidden>
+<header class="glass"><button class="ic" id="menu">☰</button><img src="logo.png" alt=""><div class="brand">MARZENEGO<i>Riverside</i></div><div class="sp"></div><select id="season" title="Stagione contabile"></select><span id="who"></span><button class="b2" id="out">Esci</button></header>
+<aside class="glass" id="nav"></aside><main id="main"></main><nav id="bar" class="glass"></nav></div>
+<div id="toast"></div>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {getFirestore,collection,getDocs,addDoc,setDoc,doc,getDoc,deleteDoc,updateDoc,query,where} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+// VECCHIO DB: SOLO LETTURA · NUOVO DB: tutte le scritture
+const O=getFirestore(initializeApp({apiKey:"AIzaSyCvqU28XLWRsfJUso0MuS72O2Qxks-MFP0",authDomain:"marzenego-2e266.firebaseapp.com",projectId:"marzenego-2e266",storageBucket:"marzenego-2e266.appspot.com"},'old'));
+const N=getFirestore(initializeApp({apiKey:"AIzaSyCHu0CUgDgADJCx5EDgrMRzZJR9v0lwuFg",authDomain:"mz-gestional-center.firebaseapp.com",projectId:"mz-gestional-center",storageBucket:"mz-gestional-center.firebasestorage.app",messagingSenderId:"178542217681",appId:"1:178542217681:web:23e7c78fb7edf4342db8f0"},'new'));
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+const $=s=>document.querySelector(s),E=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const eur=n=>(+n||0).toLocaleString('it-IT',{style:'currency',currency:'EUR'});
+const today=()=>new Date().toISOString().slice(0,10);
+const dd=d=>Math.round((new Date(d)-new Date(today()))/864e5);
+const fd=d=>new Date(d).toLocaleDateString('it-IT');
+const rows=async(db,...p)=>(await getDocs(collection(db,...p))).docs.map(d=>({id:d.id,...d.data()}));
+const sha=async s=>[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)))].map(b=>b.toString(16).padStart(2,'0')).join('');
+const num=v=>parseFloat(v)||0;
+const toast=m=>{const t=$('#toast');t.textContent=m;t.style.display='block';setTimeout(()=>t.style.display='none',3200)};
+const S={user:null,seasons:[],season:{nome:'',inizio:'0000',fine:'9999'},pages:[],route:'dash'};
+const log=a=>addDoc(collection(N,'log'),{ts:new Date().toISOString(),utente:S.user?.username||'',azione:a}).catch(()=>{});
+const badge=d=>{const n=dd(d);return `<span class="bd ${n<0?'r':n<=30?'y':'g'}">${n<0?'scaduto':n+' gg'}</span>`};
+const opts=c=>typeof c.o==='function'?c.o():(c.o||[]);
+
+/* ---------- Sezioni e permessi ---------- */
+const SEC={
+documenti:{t:'Gestione Documenti',i:'📄',it:[['giocatori','Giocatori e scadenze'],['archivio','Archivio documenti']]},
+finanze:{t:'Gestione Finanze',i:'💶',it:[['bilancio','Bilancio stagione'],['primanota','Prima nota'],['quote','Quote iscrizione'],['budget','Budget vs consuntivo']]},
+assets:{t:'Gestione Assets',i:'🎽',it:[['inventario','Inventario materiale'],['kit','Kit ai giocatori']]},
+eventi:{t:'Eventi di autopromozione',i:'📣',it:[['evpromo','Eventi'],['sponsor','CRM sponsor'],['social','Piano social']]},
+altro:{t:'Altro',i:'⚙️',it:[['utenze','Utenze e permessi'],['registro','Registro attività']]}};
+const perm=s=>S.user.admin?'write':(S.user.perm?.[s]||'none');
+const canW=s=>perm(s)==='write';
+const adminOnly=['utenze','registro'];
+
+/* ---------- Definizione tabelle fisse (nuovo DB) ---------- */
+const TB={
+archivio:{sec:'documenti',title:'Archivio documenti',path:['archivio'],cols:[{k:'nome',l:'Documento'},{k:'giocatore',l:'Giocatore (vuoto = generale)'},{k:'tipo',l:'Tipo',t:'sel',o:['Certificato medico','Contratto','Modulo','Altro']},{k:'scadenza',l:'Scadenza',t:'date',exp:1},{k:'link',l:'Link Drive/Dropbox'},{k:'file',l:'File piccolo (<700KB)',t:'file'},{k:'note',l:'Note'}]},
+giocatori:{sec:'documenti',title:'Giocatori e scadenze',noAdd:1,noDel:1,sort:'nome',
+ cols:[{k:'nome',l:'Giocatore',ro:1},{k:'nascita',l:'Data di nascita',t:'date'},{k:'cf',l:'Codice fiscale'},{k:'tel',l:'Telefono'},{k:'email',l:'Email'},{k:'tessera',l:'N° tessera'},{k:'cert',l:'Certificato medico',t:'date',exp:1},{k:'tess',l:'Tesseramento',t:'date',exp:1}],
+ load:async()=>{const [u,x]=await Promise.all([rows(O,'utenti'),rows(N,'giocatori_extra')]);const m=Object.fromEntries(x.map(e=>[e.id,e]));return u.filter(p=>(p.ruolo||'giocatore')==='giocatore').map(p=>({...(m[p.id]||{}),id:p.id,nome:p.nome||p.username}))},
+ save:(id,d)=>setDoc(doc(N,'giocatori_extra',id),d,{merge:true})},
+primanota:{sec:'finanze',title:'Prima nota',path:['primanota'],sort:'data',sd:-1,cols:[{k:'data',l:'Data',t:'date'},{k:'tipo',l:'Tipo',t:'sel',o:['Entrata','Uscita']},{k:'categoria',l:'Categoria'},{k:'importo',l:'Importo',t:'eur'},{k:'metodo',l:'Metodo',t:'sel',o:['Contanti','Bonifico','Carta','Altro']},{k:'descr',l:'Nota',t:'area'}]},
+budget:{sec:'finanze',title:'Budget (preventivo per categoria)',path:['budget'],cols:[{k:'stagione',l:'Stagione',t:'sel',o:()=>S.seasons.map(x=>x.nome)},{k:'categoria',l:'Categoria di spesa (come in Prima nota)'},{k:'preventivo',l:'Preventivo',t:'eur'}],after:budgetAfter},
+inventario:{sec:'assets',title:'Inventario materiale',path:['inventario'],cols:[{k:'articolo',l:'Articolo'},{k:'cat',l:'Categoria',t:'sel',o:['Palloni','Attrezzatura','Abbigliamento','Medico','Altro']},{k:'qta',l:'Quantità',t:'num'},{k:'stato',l:'Stato',t:'sel',o:['Nuovo','Buono','Usurato','Da sostituire']},{k:'pos',l:'Posizione'}]},
+kit:{sec:'assets',title:'Kit assegnati ai giocatori',path:['kit'],cols:[{k:'giocatore',l:'Giocatore'},{k:'articolo',l:'Kit / articolo'},{k:'taglia',l:'Taglia'},{k:'consegna',l:'Consegna',t:'date'},{k:'restituzione',l:'Restituzione',t:'date'},{k:'note',l:'Note'}]},
+evpromo:{sec:'eventi',title:'Eventi di autopromozione',path:['evpromo'],sort:'data',sd:-1,cols:[{k:'nome',l:'Evento'},{k:'data',l:'Data',t:'date'},{k:'stato',l:'Stato',t:'sel',o:['Pianificato','In corso','Concluso']},{k:'budget',l:'Budget',t:'eur'},{k:'entrate',l:'Entrate',t:'eur'},{k:'uscite',l:'Uscite',t:'eur'},{k:'check',l:'Checklist (una voce per riga)',t:'area'},{k:'note',l:'Note',t:'area'}]},
+sponsor:{sec:'eventi',title:'CRM sponsor',path:['sponsor'],cols:[{k:'azienda',l:'Azienda'},{k:'ref',l:'Referente'},{k:'contatto',l:'Telefono / email'},{k:'importo',l:'Importo',t:'eur'},{k:'scadenza',l:'Scadenza contratto',t:'date',exp:1},{k:'stato',l:'Stato',t:'sel',o:['Contatto','Trattativa','Attivo','Scaduto']},{k:'contro',l:'Contropartite',t:'area'}]},
+social:{sec:'eventi',title:'Piano editoriale social',path:['social'],sort:'data',kanban:'stato',cols:[{k:'titolo',l:'Titolo post'},{k:'canale',l:'Canale',t:'sel',o:['Instagram','Facebook','TikTok','Sito','Altro']},{k:'data',l:'Data',t:'date'},{k:'stato',l:'Stato',t:'sel',o:['Idea','In lavorazione','Programmato','Pubblicato']},{k:'testo',l:'Testo / note',t:'area'}]},
+registro:{sec:'altro',title:'Registro attività',path:['log'],noAdd:1,noDel:1,sort:'ts',sd:-1,cols:[{k:'ts',l:'Quando',t:'dt'},{k:'utente',l:'Utente'},{k:'azione',l:'Azione'}]}};
+
+/* ---------- Modali e form ---------- */
+function modal(title,body,ok,label='Salva'){const m=document.createElement('div');m.className='mod';m.innerHTML=`<div class="glass box"><h3>${title}</h3><div>${body}</div><div class="act"><button class="b2" data-x>${ok?'Annulla':'Chiudi'}</button>${ok?`<button class="b" data-ok>${label}</button>`:''}</div></div>`;document.body.appendChild(m);const c=()=>m.remove();m.querySelector('[data-x]').onclick=c;m.onclick=e=>{if(e.target===m)c()};if(ok)m.querySelector('[data-ok]').onclick=async()=>{try{if(await ok(m)!==false)c()}catch(e){toast(e.message)}};return m}
+const fld=(c,v)=>{const id='f_'+c.k;let i;
+if(c.t==='sel')i=`<select id="${id}">${opts(c).map(o=>`<option ${o==v?'selected':''}>${E(o)}</option>`).join('')}</select>`;
+else if(c.t==='bool')i=`<br><input type="checkbox" id="${id}" ${v?'checked':''}>`;
+else if(c.t==='area')i=`<textarea id="${id}" rows="3">${E(v)}</textarea>`;
+else if(c.t==='file')i=`<input type="file" id="${id}"><small>${v?.name?'Attuale: '+E(v.name):'Max 700KB, altrimenti usa un link'}</small>`;
+else i=`<input id="${id}" type="${c.t==='num'||c.t==='eur'?'number':c.t==='date'?'date':'text'}" step="any" value="${E(v)}">`;
+return `<label>${E(c.l)}${i}</label>`};
+const readF=async(cols,old)=>{const o={};for(const c of cols){if(c.ro)continue;const el=document.getElementById('f_'+c.k);if(c.t==='bool')o[c.k]=el.checked;else if(c.t==='num'||c.t==='eur')o[c.k]=el.value===''?null:+el.value;else if(c.t==='file'){const f=el.files[0];if(f){if(f.size>700*1024)throw Error('File troppo grande (max 700KB): usa un link');o[c.k]=await new Promise(r=>{const x=new FileReader();x.onload=()=>r({name:f.name,data:x.result});x.readAsDataURL(f)})}else o[c.k]=old?.[c.k]||null}else o[c.k]=el.value}return o};
+
+/* ---------- Motore tabelle generico ---------- */
+async function table(el,o){
+const cols=o.cols,ed=canW(o.sec),ro=!ed;let all=await(o.load?o.load():rows(N,...o.path)),q='',sk=o.sort||null,sd=o.sd||1,view=o.kanban?'k':'t';
+const cell=(c,v)=>{if(v==null||v==='')return '';if(c.t==='eur')return eur(v);if(c.t==='bool')return v?'✓':'';if(c.t==='file')return `<a href="${v.data}" download="${E(v.name)}">📎 ${E(v.name)}</a>`;if(c.t==='dt')return new Date(v).toLocaleString('it-IT');if(c.t==='date')return fd(v)+(c.exp?badge(v):'');if(typeof v==='string'&&/^https?:\/\//.test(v))return `<a href="${E(v)}" target="_blank" rel="noopener">🔗 apri</a>`;return E(v)};
+const reload=async()=>{all=await(o.load?o.load():rows(N,...o.path));draw()};
+const edit=x=>modal(x?'Modifica'+(x.nome&&o.load?' · '+E(x.nome):''):'Nuovo',cols.filter(c=>!c.ro).map(c=>fld(c,x?.[c.k])).join(''),async()=>{const d=await readF(cols,x);if(o.save)await o.save(x?.id,d,x);else if(x)await updateDoc(doc(N,...o.path,x.id),d);else await addDoc(collection(N,...o.path),d);log(`${x?'Modificato':'Creato'}: ${o.title}`);await reload()});
+const draw=()=>{
+let r=all.filter(x=>!q||cols.map(c=>x[c.k]).join(' ').toLowerCase().includes(q));
+if(sk)r.sort((a,b)=>((a[sk]??'')>(b[sk]??'')?1:(a[sk]??'')<(b[sk]??'')?-1:0)*sd);
+const nc=cols.filter(c=>c.t==='num'||c.t==='eur');
+let h=`<div class="tb"><input placeholder="🔍 Cerca…" value="${E(q)}" id="q">${o.kanban?`<button class="b2" id="vw">${view==='k'?'☰ Tabella':'▦ Kanban'}</button>`:''}<button class="b2" id="csv">⬇ CSV/Excel</button>${ed&&!o.noAdd?'<button class="b" id="add">+ Nuovo</button>':''}</div>`;
+if(view==='k'){const kc=cols.find(c=>c.k===o.kanban);h+=`<div class="kan">${opts(kc).map(s=>{const g=r.filter(x=>x[kc.k]===s);return `<div class="kcol"><h4>${s} <span>${g.length}</span></h4>${g.map(x=>`<div class="kcard glass"><b>${E(x[cols[0].k])}</b><small>${E(x.canale||'')} ${x.data?fd(x.data):''}</small>${ed?`<select data-mv="${x.id}">${opts(kc).map(t=>`<option ${t===s?'selected':''}>${t}</option>`).join('')}</select><div><button class="ic" data-e="${x.id}">✎</button><button class="ic" data-d="${x.id}">🗑</button></div>`:''}</div>`).join('')}</div>`}).join('')}</div>`}
+else{h+=`<div class="glass tw"><table><thead><tr>${cols.map(c=>`<th data-s="${c.k}">${E(c.l.replace(/\(.*\)/,''))}${sk===c.k?(sd>0?' ▲':' ▼'):''}</th>`).join('')}<th></th></tr></thead><tbody>${r.map(x=>`<tr>${cols.map(c=>`<td>${cell(c,x[c.k])}</td>`).join('')}<td style="white-space:nowrap">${ed?`<button class="ic" data-e="${x.id}">✎</button>${o.noDel?'':`<button class="ic" data-d="${x.id}">🗑</button>`}`:''}</td></tr>`).join('')||`<tr><td colspan="${cols.length+1}"><small>Nessun dato</small></td></tr>`}</tbody>${nc.length?`<tfoot><tr>${cols.map(c=>{if(c.t!=='num'&&c.t!=='eur')return '<td></td>';const v=r.map(x=>num(x[c.k])),s=v.reduce((a,b)=>a+b,0),f=c.t==='eur'?eur:n=>n.toLocaleString('it-IT');return `<td>Σ ${f(s)}<br><small>media ${f(v.length?s/v.length:0)} · n ${v.filter(n=>n).length}</small></td>`}).join('')}<td></td></tr></tfoot>`:''}</table></div>`}
+el.innerHTML=h+'<div id="aft"></div>';
+const qi=el.querySelector('#q');qi.oninput=()=>{q=qi.value.toLowerCase();const p=qi.selectionStart;draw();const n=el.querySelector('#q');n.focus();n.setSelectionRange(p,p)};
+el.querySelector('#add')?.addEventListener('click',()=>edit());
+el.querySelector('#vw')?.addEventListener('click',()=>{view=view==='k'?'t':'k';draw()});
+el.querySelectorAll('[data-s]').forEach(t=>t.onclick=()=>{sd=sk===t.dataset.s?-sd:1;sk=t.dataset.s;draw()});
+el.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>edit(all.find(x=>x.id===b.dataset.e)));
+el.querySelectorAll('[data-d]').forEach(b=>b.onclick=async()=>{if(!confirm('Eliminare questa riga?'))return;await deleteDoc(doc(N,...o.path,b.dataset.d));log('Eliminato in '+o.title);reload()});
+el.querySelectorAll('[data-mv]').forEach(s=>s.onchange=async()=>{await updateDoc(doc(N,...o.path,s.dataset.mv),{[o.kanban]:s.value});log('Spostato post: '+s.value);reload()});
+el.querySelector('#csv').onclick=()=>{const t=r.map(x=>cols.map(c=>{let v=x[c.k];if(c.t==='file')v=v?.name;return '"'+String(v??'').replace(/"/g,'""')+'"'}).join(';'));const b=new Blob(['\ufeff'+cols.map(c=>c.l).join(';')+'\n'+t.join('\n')],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=o.title.replace(/\W+/g,'_')+'.csv';a.click()};
+o.after?.(all,el.querySelector('#aft'))};
+draw()}
+
+/* ---------- Bilancio (stessa logica del vecchio sistema + nuovi movimenti) ---------- */
+async function bil(s){const [ev,en,ra,sp,pn,ep]=await Promise.all([rows(O,'eventi'),rows(O,'entrate'),rows(O,'rate'),rows(O,'spese'),rows(N,'primanota'),rows(N,'evpromo')]);
+const inr=d=>d>=s.inizio&&d<=s.fine,r={ent:0,quote:0,pnE:0,epE:0,sp:0,all:0,par:0,altro:0,nall:0,npar:0,pnU:0,epU:0};
+en.forEach(x=>{if(x.stagione===s.nome)r.ent+=num(x.valore)});
+ra.forEach(x=>{if(x.stagione===s.nome&&x.pagata===true)r.quote+=num(x.importo)});
+sp.forEach(x=>{if(x.stagione===s.nome)r.sp+=num(x.valore)});
+ev.forEach(x=>{if(inr(x.data)){const c=num(x.costo);if(x.tipo==='Allenamento'){r.all+=c;r.nall++}else if(x.tipo==='Partita'){r.par+=c;r.npar++}else r.altro+=c}});
+pn.forEach(x=>{if(inr(x.data)){if(x.tipo==='Entrata')r.pnE+=num(x.importo);else r.pnU+=num(x.importo)}});
+ep.forEach(x=>{if(inr(x.data)){r.epE+=num(x.entrate);r.epU+=num(x.uscite)}});
+r.E=r.ent+r.quote+r.pnE+r.epE;r.U=r.sp+r.all+r.par+r.altro+r.pnU+r.epU;r.saldo=r.E-r.U;return r}
+const line=(l,v,cls='')=>`<div><span>${l}</span><b class="${cls}">${eur(v)}</b></div>`;
+async function vBilancio(el){const r=await bil(S.season);el.innerHTML=`<div class="grid"><div class="glass kpi"><small>Entrate</small><b class="pos">${eur(r.E)}</b></div><div class="glass kpi"><small>Uscite</small><b class="neg">${eur(r.U)}</b></div><div class="glass kpi"><small>Saldo ${E(S.season.nome)}</small><b class="${r.saldo>=0?'pos':'neg'}">${eur(r.saldo)}</b></div></div>
+<div class="grid"><div class="glass card lst"><h3>Entrate</h3>${line('Entrate (vecchio sistema)',r.ent)}${line('Quote tesserati pagate',r.quote)}${line('Prima nota (entrate)',r.pnE)}${line('Eventi autopromozione',r.epE)}</div>
+<div class="glass card lst"><h3>Uscite</h3>${line('Spese (vecchio sistema)',r.sp)}${line(`Allenamenti (${r.nall})`,r.all)}${line(`Partite (${r.npar})`,r.par)}${line('Altri eventi calendario',r.altro)}${line('Prima nota (uscite)',r.pnU)}${line('Eventi autopromozione',r.epU)}</div></div>
+<small>Periodo: ${S.season.inizio} → ${S.season.fine}. Il vecchio database è letto, mai modificato.</small>`}
+async function budgetAfter(all,w){const s=S.season,pn=(await rows(N,'primanota')).filter(x=>x.tipo==='Uscita'&&x.data>=s.inizio&&x.data<=s.fine),bud=all.filter(x=>x.stagione===s.nome),cats=[...new Set([...bud.map(x=>x.categoria),...pn.map(x=>x.categoria)])].filter(Boolean);
+const d=cats.map(c=>({c,p:bud.filter(x=>x.categoria===c).reduce((a,x)=>a+num(x.preventivo),0),u:pn.filter(x=>x.categoria===c).reduce((a,x)=>a+num(x.importo),0)})),mx=Math.max(1,...d.map(x=>Math.max(x.p,x.u)));
+w.innerHTML=`<div class="glass card" style="margin-top:14px"><h3>Preventivo vs consuntivo · ${E(s.nome)}</h3>${d.map(x=>`<div style="margin:12px 0"><div class="lst"><div style="border:0;padding:0"><b>${E(x.c)}</b><span>${eur(x.u)} / ${eur(x.p)} <b class="${x.u>x.p?'neg':'pos'}">${x.u>x.p?'sforato':'ok'}</b></span></div></div><div class="bar"><i style="width:${x.p/mx*100}%;background:var(--oro)"></i></div><div class="bar"><i style="width:${x.u/mx*100}%;background:${x.u>x.p?'#ff8a7a':'#7fe3a0'}"></i></div></div>`).join('')||'<small>Aggiungi un preventivo per vedere il confronto (consuntivo = uscite di Prima nota per categoria).</small>'}<small>🟨 preventivo · 🟩/🟥 consuntivo</small></div>`}
+
+/* ---------- Quote iscrizione ---------- */
+async function vQuote(el){const [t,r,u,x]=await Promise.all([rows(O,'tesserati'),rows(O,'rate'),rows(O,'utenti'),rows(N,'giocatori_extra')]);const s=S.season.nome,ex=Object.fromEntries(x.map(e=>[e.id,e])),tel={};u.forEach(p=>{const e=ex[p.id];if(e?.tel)tel[(p.nome||'').toLowerCase()]=e.tel});
+const L=t.filter(a=>a.stagione===s).sort((a,b)=>a.nome.localeCompare(b.nome)).map(a=>{const rs=r.filter(y=>y.tesseratoId===a.id),paid=rs.filter(y=>y.pagata).reduce((z,y)=>z+num(y.importo),0),dueR=rs.filter(y=>!y.pagata),due=dueR.reduce((z,y)=>z+num(y.importo),0);return {a,paid,due,dueR}});
+const tot=L.reduce((z,y)=>z+y.due,0);
+el.innerHTML=`<div class="tb">${canW('finanze')?'<button class="b" id="pay">+ Registra pagamento</button>':''}<span style="align-self:center">Da incassare: <b>${eur(tot)}</b></span></div><div class="glass tw"><table><thead><tr><th>Tesserato</th><th>Pagato</th><th>Da pagare</th><th>Stato</th><th></th></tr></thead><tbody>${L.map((y,i)=>`<tr><td>${E(y.a.nome)}</td><td>${eur(y.paid)}</td><td>${eur(y.due)}</td><td><span class="bd ${y.due?'y':'g'}">${y.due?'da saldare':'in regola'}</span></td><td>${y.due?`<button class="b2" data-s="${i}">✉ Sollecito</button>`:''}</td></tr>`).join('')||'<tr><td colspan="5"><small>Nessun tesserato per questa stagione</small></td></tr>'}</tbody></table></div><small>Tesserati e rate dal vecchio sistema (sola lettura). I nuovi pagamenti vanno in Prima nota come “Quota iscrizione”.</small>`;
+el.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{const y=L[b.dataset.s],msg=`Ciao ${y.a.nome}, ti ricordiamo che risultano da saldare ${eur(y.due)} (${y.dueR.map(z=>z.nomeRata).filter(Boolean).join(', ')||'quota iscrizione'}) per la stagione ${s}. Grazie! Marzenego Riverside`,n=(tel[y.a.nome.toLowerCase()]||'').replace(/\D/g,'');
+modal('Sollecito · '+E(y.a.nome),`<p style="margin-bottom:12px">${E(msg)}</p><a class="b" style="text-decoration:none;display:inline-block;margin-right:8px" target="_blank" href="https://wa.me/${n}?text=${encodeURIComponent(msg)}">WhatsApp</a><a class="b2" style="text-decoration:none;display:inline-block" href="mailto:?subject=${encodeURIComponent('Quota iscrizione '+s)}&body=${encodeURIComponent(msg)}">Email</a>`)});
+el.querySelector('#pay')?.addEventListener('click',()=>modal('Registra pagamento quota',`<label>Tesserato<select id="pg">${L.map(y=>`<option>${E(y.a.nome)}</option>`).join('')}</select></label><label>Importo<input id="pi" type="number" step="any"></label><label>Metodo<select id="pm"><option>Contanti</option><option>Bonifico</option><option>Carta</option></select></label>`,async()=>{const i=+$('#pi').value;if(!i)throw Error('Importo mancante');await addDoc(collection(N,'primanota'),{data:today(),tipo:'Entrata',categoria:'Quota iscrizione',importo:i,metodo:$('#pm').value,descr:'Quota '+$('#pg').value});log('Pagamento quota '+$('#pg').value);toast('Registrato in Prima nota')}))}
+
+/* ---------- Utenze ---------- */
+async function vUtenze(el){const u=await rows(N,'utenti_gestionale');
+el.innerHTML=`<div class="tb"><button class="b" id="nu">+ Nuova utenza</button></div><div class="glass tw"><table><thead><tr><th>Utente</th><th>Nome</th><th>Ruolo / permessi</th><th></th></tr></thead><tbody>${u.map(x=>`<tr><td>${E(x.username)}</td><td>${E(x.nome)}</td><td>${x.admin?'<span class="bd y">ADMIN</span>':Object.keys(SEC).filter(k=>k!=='altro'||1).map(k=>`${SEC[k].i} ${x.perm?.[k]||'none'}`).join(' · ')}</td><td><button class="ic" data-e="${x.id}">✎</button>${x.id===S.user.id?'':`<button class="ic" data-d="${x.id}">🗑</button>`}</td></tr>`).join('')}</tbody></table></div><small>Permessi per sezione: none = nascosta, read = sola lettura, write = modifica. “Altro” governa le pagine personalizzate; utenze e registro sono solo admin.</small>`;
+const f=x=>modal(x?'Modifica utenza':'Nuova utenza',`<label>Nome<input id="un" value="${E(x?.nome)}"></label><label>Nome utente<input id="uu" value="${E(x?.username)}"></label><label>Password ${x?'(vuota = invariata)':''}<input id="up" type="password"></label><label><input type="checkbox" id="ua" ${x?.admin?'checked':''}> Amministratore (tutti i poteri)</label>${Object.keys(SEC).map(k=>`<label>${SEC[k].i} ${SEC[k].t}<select id="pm_${k}">${['none','read','write'].map(p=>`<option ${(x?.perm?.[k]||'none')===p?'selected':''}>${p}</option>`).join('')}</select></label>`).join('')}`,async()=>{const username=$('#uu').value.trim().toLowerCase();if(!username)throw Error('Nome utente mancante');if(u.some(y=>y.username===username&&y.id!==x?.id))throw Error('Nome utente già esistente');if(!x&&!$('#up').value)throw Error('Password mancante');const d={nome:$('#un').value.trim(),username,admin:$('#ua').checked,perm:Object.fromEntries(Object.keys(SEC).map(k=>[k,$('#pm_'+k).value]))};if($('#up').value)d.hash=await sha($('#up').value);if(x)await updateDoc(doc(N,'utenti_gestionale',x.id),d);else await addDoc(collection(N,'utenti_gestionale'),d);log('Utenza '+username);render()});
+el.querySelector('#nu').onclick=()=>f();el.querySelectorAll('[data-e]').forEach(b=>b.onclick=()=>f(u.find(x=>x.id===b.dataset.e)));
+el.querySelectorAll('[data-d]').forEach(b=>b.onclick=async()=>{if(confirm('Eliminare utenza?')){await deleteDoc(doc(N,'utenti_gestionale',b.dataset.d));log('Utenza eliminata');render()}})}
+
+/* ---------- Dashboard ---------- */
+async function vDash(el){const s=S.season,P=k=>perm(k)!=='none';
+const [b,ge,ar,so,sc,t,r,u]=await Promise.all([P('finanze')?bil(s):null,P('documenti')?rows(N,'giocatori_extra'):[],P('documenti')?rows(N,'archivio'):[],P('eventi')?rows(N,'sponsor'):[],P('eventi')?rows(N,'social'):[],P('finanze')?rows(O,'tesserati'):[],P('finanze')?rows(O,'rate'):[],rows(O,'utenti')]);
+const nm=Object.fromEntries(u.map(p=>[p.id,p.nome||p.username])),tid=new Set(t.filter(x=>x.stagione===s.nome).map(x=>x.id)),du=r.filter(x=>tid.has(x.tesseratoId)&&!x.pagata);
+const sca=[];ge.forEach(g=>{[['cert','Certificato'],['tess','Tesseramento']].forEach(([k,l])=>{if(g[k]&&dd(g[k])<=30)sca.push([g[k],`${l} · ${nm[g.id]||'?'}`])})});ar.forEach(a=>{if(a.scadenza&&dd(a.scadenza)<=30)sca.push([a.scadenza,`${a.nome} ${a.giocatore?'· '+a.giocatore:''}`])});sca.sort();
+const row=(d,l)=>`<div><span>${E(l)}</span><span>${fd(d)}${badge(d)}</span></div>`,emp='<small>Niente in programma</small>';
+const post=sc.filter(x=>x.stato!=='Pubblicato'&&x.data&&x.data>=today()).sort((a,c)=>a.data>c.data?1:-1).slice(0,5),spo=so.filter(x=>x.scadenza&&x.stato==='Attivo'&&dd(x.scadenza)<=60).sort((a,c)=>a.scadenza>c.scadenza?1:-1);
+el.innerHTML=`<div class="ph"><h2><span class="script" style="font-size:40px">Benvenuto</span> ${E(S.user.nome||S.user.username)}</h2></div>${b?`<div class="grid"><div class="glass kpi"><small>Saldo ${E(s.nome)}</small><b class="${b.saldo>=0?'pos':'neg'}">${eur(b.saldo)}</b></div><div class="glass kpi"><small>Entrate</small><b>${eur(b.E)}</b></div><div class="glass kpi"><small>Uscite</small><b>${eur(b.U)}</b></div><div class="glass kpi"><small>Quote non pagate</small><b>${du.length} · ${eur(du.reduce((a,x)=>a+num(x.importo),0))}</b></div></div>`:''}
+<div class="grid">${P('documenti')?`<div class="glass card lst"><h3>⏰ Scadenze imminenti</h3>${sca.map(x=>row(...x)).join('')||emp}</div>`:''}${P('eventi')?`<div class="glass card lst"><h3>📱 Prossimi post</h3>${post.map(x=>row(x.data,x.titolo+' · '+x.canale)).join('')||emp}</div><div class="glass card lst"><h3>🤝 Sponsor in scadenza</h3>${spo.map(x=>row(x.scadenza,x.azienda)).join('')||emp}</div>`:''}</div>`}
+
+/* ---------- Pagine personalizzate ---------- */
+const TY={testo:'text',numero:'num','€':'eur',euro:'eur',data:'date','sì/no':'bool',lungo:'area'};
+function parseCols(s){return s.split(',').map((p,i)=>{const [l,t='testo']=p.split(':').map(x=>x.trim());if(!l)return null;const m=t.match(/^scelta=(.+)$/);return {k:'c'+i,l,t:m?'sel':TY[t.toLowerCase()]||'text',o:m?m[1].split('/').map(x=>x.trim()):undefined}}).filter(Boolean)}
+async function vPage(el,id){const p=S.pages.find(x=>x.id===id);if(!p){el.innerHTML='<div class="card glass">Pagina non trovata</div>';return}
+const ed=canW(p.sec);el.innerHTML=`<div class="ph"><h2>${E(p.nome)}</h2>${ed?'<button class="b2" id="dp">🗑 Elimina pagina</button>':''}</div><div id="pc"></div>`;
+el.querySelector('#dp')?.addEventListener('click',async()=>{if(confirm('Eliminare la pagina (le righe restano nel DB)?')){await deleteDoc(doc(N,'pagine',id));log('Pagina eliminata: '+p.nome);await loadPages();go('dash')}});
+const c=el.querySelector('#pc');
+if(p.tipo==='documento'){c.innerHTML=`${ed?'<div class="tb"><button class="b2" data-c="bold"><b>B</b></button><button class="b2" data-c="italic"><i>I</i></button><button class="b2" data-c="insertUnorderedList">• Lista</button><button class="b2" data-c="formatBlock" data-v="h3">Titolo</button><button class="b" id="sv">Salva</button></div>':''}<div class="glass ed" ${ed?'contenteditable':''}>${p.content||''}</div>`;
+c.querySelectorAll('[data-c]').forEach(b=>b.onmousedown=e=>{e.preventDefault();document.execCommand(b.dataset.c,false,b.dataset.v)});
+c.querySelector('#sv')?.addEventListener('click',async()=>{await updateDoc(doc(N,'pagine',id),{content:c.querySelector('.ed').innerHTML});log('Documento salvato: '+p.nome);toast('Salvato')})}
+else table(c,{sec:p.sec,title:p.nome,path:['pagine',id,'righe'],cols:p.tipo==='raccolta'?[{k:'nome',l:'Nome'},{k:'link',l:'Link'},{k:'file',l:'File (<700KB)',t:'file'},{k:'note',l:'Note'}]:p.cols})}
+const loadPages=async()=>{S.pages=await rows(N,'pagine')};
+function newPage(sec){modal('Nuova pagina · '+SEC[sec].t,`<label>Nome<input id="pn"></label><label>Tipo<select id="pt"><option value="tabella">Tabella</option><option value="documento">Documento</option><option value="raccolta">Raccolta file/link</option></select></label><label>Colonne (solo tabella): Nome:tipo, separate da virgola<input id="pcl" placeholder="Voce:testo, Costo:€, Data:data, Fatto:sì/no, Stato:scelta=A/B/C"></label><small>Tipi: testo, numero, €, data, sì/no, lungo, scelta=A/B/C. Numeri e € hanno totali e medie automatici.</small>`,async()=>{const nome=$('#pn').value.trim(),tipo=$('#pt').value;if(!nome)throw Error('Nome mancante');const cols=parseCols($('#pcl').value);if(tipo==='tabella'&&!cols.length)throw Error('Indica almeno una colonna');const r=await addDoc(collection(N,'pagine'),{sec,nome,tipo,cols,content:''});log('Nuova pagina: '+nome);await loadPages();go('p:'+r.id)},'Crea')}
+
+/* ---------- Navigazione ---------- */
+const V={bilancio:vBilancio,quote:vQuote,utenze:vUtenze};
+function nav(){const [a,b]=S.route.split(':'),cur=S.route;let h=`<button class="ni ${a==='dash'?'on':''}" data-r="dash">🏠 Dashboard</button>`;
+for(const k in SEC){if(perm(k)==='none')continue;const its=SEC[k].it.filter(i=>!adminOnly.includes(i[0])||S.user.admin);h+=`<div class="sh">${SEC[k].i} ${SEC[k].t}</div>`+its.map(i=>`<button class="ni ${cur===k+':'+i[0]?'on':''}" data-r="${k}:${i[0]}">${i[1]}</button>`).join('')+S.pages.filter(p=>p.sec===k).map(p=>`<button class="ni ${cur==='p:'+p.id?'on':''}" data-r="p:${p.id}">${{tabella:'▤',documento:'📝',raccolta:'🗂'}[p.tipo]} ${E(p.nome)}</button>`).join('')+(canW(k)?`<button class="ni add" data-n="${k}">+ Nuova pagina</button>`:'')}
+$('#nav').innerHTML=h;$('#nav').querySelectorAll('[data-r]').forEach(x=>x.onclick=()=>go(x.dataset.r));$('#nav').querySelectorAll('[data-n]').forEach(x=>x.onclick=()=>newPage(x.dataset.n));
+$('#bar').innerHTML=`<button class="${a==='dash'?'on':''}" data-r="dash">🏠</button>`+Object.keys(SEC).filter(k=>perm(k)!=='none').map(k=>`<button class="${a===k||(a==='p'&&S.pages.find(p=>p.id===b)?.sec===k)?'on':''}" data-r="${k}:${SEC[k].it[0][0]}">${SEC[k].i}</button>`).join('');$('#bar').querySelectorAll('[data-r]').forEach(x=>x.onclick=()=>go(x.dataset.r))}
+function go(r){S.route=r;$('#nav').classList.remove('open');render()}
+async function render(){const [a,b]=S.route.split(':'),el=$('#main');nav();el.innerHTML='<div class="glass card">Caricamento…</div>';
+try{if(a==='dash')return await vDash(el);if(a==='p')return await vPage(el,b);
+if(perm(a)==='none'||(adminOnly.includes(b)&&!S.user.admin)){el.innerHTML='<div class="glass card">Non hai i permessi per questa sezione.</div>';return}
+const title=SEC[a].it.find(i=>i[0]===b)[1];el.innerHTML=`<div class="ph"><h2>${title}</h2></div><div id="vc"></div>`;const c=el.querySelector('#vc');
+if(V[b])await V[b](c);else await table(c,{...TB[b],sec:TB[b].sec})}
+catch(e){el.innerHTML=`<div class="glass card err">Errore: ${E(e.message)}<br><small>Se è un errore di permessi, controlla le regole Firestore (vedi README).</small></div>`}}
+
+/* ---------- Login e avvio ---------- */
+async function start(user){S.user=user;localStorage.setItem('mz_uid',user.id);
+const st=await rows(O,'stagioniContabili').catch(()=>[]);S.seasons=st.sort((a,b)=>(b.inizio||'')>(a.inizio||'')?1:-1);
+const sel=$('#season');sel.innerHTML=S.seasons.map(s=>`<option>${E(s.nome)}</option>`).join('');
+const pick=()=>{S.season=S.seasons.find(s=>s.nome===sel.value)||S.season};pick();sel.onchange=()=>{pick();render()};
+await loadPages();$('#who').textContent=user.nome||user.username;$('#login').hidden=true;$('#app').hidden=false;render()}
+async function login(){const u=$('#lu').value.trim().toLowerCase(),p=$('#lp').value,e=$('#le');e.textContent='';
+try{let list=await getDocs(collection(N,'utenti_gestionale'));
+if(list.empty){await addDoc(collection(N,'utenti_gestionale'),{username:'pippo',nome:'Pippo',admin:true,perm:{},hash:await sha('pippo')});list=await getDocs(collection(N,'utenti_gestionale'))}
+const d=list.docs.find(x=>x.data().username===u);if(!d||d.data().hash!==await sha(p)){e.textContent='Credenziali non valide';return}
+await start({id:d.id,...d.data()});log('Accesso')}catch(x){e.textContent='Errore di connessione: '+x.message}}
+$('#lb').onclick=login;$('#lp').onkeydown=e=>{if(e.key==='Enter')login()};
+$('#out').onclick=()=>{localStorage.removeItem('mz_uid');location.reload()};$('#menu').onclick=()=>$('#nav').classList.toggle('open');
+(async()=>{const id=localStorage.getItem('mz_uid');if(id)try{const d=await getDoc(doc(N,'utenti_gestionale',id));if(d.exists())await start({id,...d.data()})}catch(e){}})();
+</script></body></html>
